@@ -1,10 +1,10 @@
 /****************************************************************************
  *
- * bmeans2.cc
+ * bmeans2.cc -- Transient removel using batch means
  *
  * This file is part of libcppsim
  *
- * Copyright (C) 2003, 2004 Moreno Marzolla
+ * Copyright (C) 2003, 2004, 2024 Moreno Marzolla
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@
 //
 // J. Banks, J. S. Carson, B. L. Nelson, D. M. Nicol,
 // "Discrete-Event System Simulation",
-// 3rd ed, Prentice Hall, 2000      ISBN 0130887021 
+// 3rd ed, Prentice Hall, 2000      ISBN 0130887021
 //
 // I tried to use more or less the same name for the
 // variables. Remember, however, that indices of the vectors, in this
@@ -46,14 +46,14 @@
 // z_{\alpha/2} is the 100(1-\alpha/2) percentile of the normal distribution.
 #define Z( alpha_2 ) qnorm( 1.0 - (double)(alpha_2) )
 
-// t_{\alpha/2, f} is the 100( 1 - \alpha / 2 ) percentile of 
+// t_{\alpha/2, f} is the 100( 1 - \alpha / 2 ) percentile of
 // a Student's t distribution.
 #define T( alpha_2, f ) qt( 1.0 - (double)(alpha_2), f, true )
 
 bmeans2::bmeans2( const string& name, double confp, trremoval* t ) :
     statistic( name, confp ),
-    _t( t ? 
-        t : 
+    _t( t ?
+        t :
         new trremoval_frac( "bmeans(" + name + ")::_t", .2 ) )
 {
     assert( 0 != _t );
@@ -67,7 +67,7 @@ bmeans2::~bmeans2( )
 void bmeans2::update( double v )
 {
     _t->update( v );
-    _numUpdates++;    
+    _numUpdates++;
 }
 
 void bmeans2::reset( void )
@@ -77,13 +77,13 @@ void bmeans2::reset( void )
     _numResets++;
 }
 
-void bmeans2::report( void ) const throw( runtime_error )
+void bmeans2::report( void ) const
 {
     //    confInt v = const_cast<bmeans2*>( this )->value();
     //    cout << v.lBound() << "-" << v.uBound() << endl;
 }
 
-confInt bmeans2::value( void ) throw( runtime_error )
+confInt bmeans2::value( void )
 {
     unsigned int k = 200;       // Number of batches
     unsigned int b;             // btach size
@@ -104,12 +104,12 @@ confInt bmeans2::value( void ) throw( runtime_error )
 
     // vector of means
     vector<double> Y_bar( k, 0.0 );
-    for ( i=0; i<k; i++ )        
+    for ( i=0; i<k; i++ )
         Y_bar[i] = ( _sum[ (i+1)*b ] - _sum[ i*b ] ) / (double)b;
-    
+
     // Overall mean
     double _mean = _sum[ k*b ] / (double)(k*b);
-    
+
     // Compute the lag-1 autocorrelation
     double ro_1_num = 0.0;
     double ro_1_den = 0.0;
@@ -118,8 +118,8 @@ confInt bmeans2::value( void ) throw( runtime_error )
     for ( j=0; j<k; j++ )
         ro_1_den += ( Y_bar[j] - _mean ) * ( Y_bar[j] - _mean );
     double ro_1 = ro_1_num / ro_1_den;
-    
-    snprintf( msg, sizeof( msg ), 
+
+    snprintf( msg, sizeof( msg ),
               "lag-1 autocorrelation too big (is %e, should be at most 0.2)", ro_1 );
     t_assert( ro_1 < 0.2, runtime_error( msg ) );
 
@@ -133,14 +133,14 @@ confInt bmeans2::value( void ) throw( runtime_error )
     // Check the batch means for independence
     double C =
         sqrt( (double)( squared(k)-1)/(double)(k-2) ) *
-        ( ro_1 + 
+        ( ro_1 +
           (squared( Y_bar[0] - _mean )+squared( Y_bar[k-1] - _mean)) /
           ( 2.0 * ro_1_den ) );
 
-    snprintf( msg, sizeof( msg ), 
+    snprintf( msg, sizeof( msg ),
               "Independence test failed (C=%e, at most qnorm=%e)", C, Z( 0.05 ) );
     t_assert( C < Z( 0.05 ), runtime_error( msg ) );
-    
+
     // Compute S^2/k
     double S_2_k = 0.0;
     for ( j=0; j<k; j++ )

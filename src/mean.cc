@@ -1,11 +1,9 @@
 /*****************************************************************************
  *
- * mean.cc
- *
- * Compute the mean of a sequence of UNCORRELATED observations
+ * mean.cc -- Compute the mean of a sequence of UNCORRELATED observations
  * x_1, x_2, \ldots x_N
  *
- * Copyright (C) 2002, 2003 Moreno Marzolla
+ * Copyright (C) 2002, 2003, 2024 Moreno Marzolla
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +55,7 @@ void mean::reset( void )
     _numResets++;
 }
 
-confInt mean::value( void ) throw( runtime_error )
+confInt mean::value( void )
 {
     //
     // Banks, p. 227
@@ -68,14 +66,14 @@ confInt mean::value( void ) throw( runtime_error )
     return confInt( m()-w, m()+w, confl() );
 }
 
-double mean::m( void ) const throw( runtime_error )
+double mean::m( void ) const
 {
     t_assert( numUpdates() > 0,
               runtime_error( "Computing the mean with no observations" ) );
     return _sum / (double)numUpdates();
 }
 
-double mean::variance( void ) const throw( runtime_error )
+double mean::variance( void ) const
 {
     t_assert( numUpdates() > 1,
               runtime_error( "Computing the variance with less than 2 observations" ) );
@@ -84,16 +82,16 @@ double mean::variance( void ) const throw( runtime_error )
     // variance to be a tiny negative number. In this way the sqrt()
     // function on function mean() will fail and cause problems
     //
-    return fabs( 
-                ( _sumsq - _sum*_sum / (double)numUpdates( ) ) / 
-                (double)( numUpdates( )-1 ) 
+    return fabs(
+                ( _sumsq - _sum*_sum / (double)numUpdates( ) ) /
+                (double)( numUpdates( )-1 )
                 );
 }
 
-void mean::report( void ) const throw( runtime_error )
+void mean::report( void ) const
 {
     confInt c = const_cast<mean*>(this)->value( );
-    printf( "%15s / %6s / %8s / %8s\n" 
+    printf( "%15s / %6s / %8s / %8s\n"
             "%15s / %6d / %8.4f / %8.4f\n",
             "Name", "Obs", "lBound", "uBound",
             name( ).c_str( ), numUpdates( ), c.lBound( ), c.uBound( ) );

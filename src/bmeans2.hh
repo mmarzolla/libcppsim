@@ -1,10 +1,10 @@
 /****************************************************************************
  *
- * bmeans2.hh
+ * bmeans2.hh -- Transient removal using batch means
  *
  * This file is part of libcppsim
  *
- * Copyright (C) 2003 Moreno Marzolla
+ * Copyright (C) 2003, 2024 Moreno Marzolla
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,14 +33,14 @@
 
 class bmeans2 : public statistic {
 public:
-    bmeans2( const string& name, 
+    bmeans2( const string& name,
              double confp,       // The probability for the confidence interval
              trremoval* t = 0 );
     virtual ~bmeans2( );
     void update( double v );    // Insert the new value into the list
-    void reset( void );       
-    void report( void ) const throw( runtime_error );
-    confInt value( void ) throw( runtime_error );
+    void reset( void );
+    void report( void ) const;
+    confInt value( void );
 protected:
     trremoval* _t;
 };

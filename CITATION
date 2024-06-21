@@ -1,0 +1,20 @@
+If you use this library, please cite as:
+
+Moreno Marzolla, libcppsim: a Simula-like, Portable Process-Oriented
+Simulation Library in C++, Proceedings of
+ESM'04, the 18th European Simulation Multiconference (Graham Horton, editor), Magdeburg, DE, jun 13–16 2004, ISBN 3-936150-35-4, pp. 222–227
+
+BibTex citation block:
+
+@inproceedings{libcppsim,
+  author = "Moreno Marzolla",
+  title  = "\texttt{libcppsim}: a {Simula}-like, Portable Process-Oriented Simulation Library in {C++}",
+  booktitle = "Proc. of ESM'04, the 18th European Simulation Multiconference",
+  editor    = "Graham Horton",
+  publisher = "SCS--European Publishing House",
+  month     = jun # " 13--16",
+  year      = 2004,
+  address   = "Magdeburg, DE",
+  isbn      = "3-936150-35-4",
+  pages     = "222--227"
+}

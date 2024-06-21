@@ -1,11 +1,9 @@
 /*****************************************************************************
  *
- * mean.hh
+ * mean.hh --  Compute the mean of a sequence of UNCORRELATED observations
+ * x_1, x_2, \ldots x_N
  *
- * Compute the mean of a sequence of UNCORRELATED observations
- * x_1, x_2, \ldots x_N 
- *
- * Copyright (C) 2002, 2003 Moreno Marzolla
+ * Copyright (C) 2002, 2003, 2024 Moreno Marzolla
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,8 +21,8 @@
  *
  *****************************************************************************/
 
-#ifndef _CPPSIM_MEAN_HH
-#define _CPPSIM_MEAN_HH
+#ifndef CPPSIM_MEAN_HH
+#define CPPSIM_MEAN_HH
 
 #include <vector>
 #include <stdexcept>
@@ -36,16 +34,16 @@ public:
     virtual ~mean( );
     virtual void update( double v );
     virtual void reset( void );
-    virtual void report( void ) const throw( runtime_error );
-    virtual confInt value( void ) throw( runtime_error );
+    virtual void report( void ) const;
+    virtual confInt value( void );
 
     // Accessors specific for this class
 
     // Returns the mean (average) of values
-    double m( void ) const throw( runtime_error );        
+    double m( void ) const;
 
     // Returns the variance
-    double variance( void ) const throw( runtime_error ); 
+    double variance( void ) const;
 
 protected:
     double _sum;        // Sum of observations

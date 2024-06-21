@@ -1,10 +1,8 @@
 /*****************************************************************************
  *
- * rng.cc
+ * rng.cc -- Random Number Generators classes.
  *
- * Random Number Generators classes.
- *
- * Copyright (C) 2002, 2003 Moreno Marzolla
+ * Copyright (C) 2002, 2003, 2024 Moreno Marzolla
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,21 +58,21 @@ double rngUniform01::draw( seed_t s )
 
     p = 527612.0 * s22 - 1370589.0 * s20;
     k = (long)(p / m2);  p -= k*m2;  if (p < 0.0) p += m2;
-    s20 = s21;   s21 = s22;  s22 = p; 
+    s20 = s21;   s21 = s22;  s22 = p;
 
     s[0] = s10;  s[1] = s11;  s[2] = s12;
     s[3] = s20;  s[4] = s21;  s[5] = s22;
 
-    if (s12 <= s22) 
+    if (s12 <= s22)
         return ((s12 - s22 + m1) * norm);
-    else 
+    else
         return ((s12 - s22) * norm);
 }
 
 //
 // Advance the global seed space
 //
-void rngUniform01::advance( unsigned int count ) 
+void rngUniform01::advance( unsigned int count )
 {
     while( count-- > 0 )
         draw( _globalSeed );
@@ -111,7 +109,7 @@ void rngUniform01::report( void ) const
 {
     printf("RngUniform01\n"
            "============\n"
-           "\t%15s / %8s / %8s\n" 
+           "\t%15s / %8s / %8s\n"
            "\t%15s / %8d / %8d\n",
            "Name", "Drawn", "Resets",
            name().c_str( ), _numDraws, numResets() );
@@ -147,7 +145,7 @@ void rngUniform::reset( void )
 void rngUniform::report( void ) const
 {
     printf( "RngUniform\n"
-            "==========\n",
+            "==========\n"
             "\t%15s / %8s / %8s / %8s / %8s\n"
             "\t%15s / %8d / %8d / %8.2f / %8.2f\n\n",
             "Name", "Draws", "Resets", "a", "b",
@@ -190,7 +188,7 @@ void rngDiscUniform::report( void ) const
 {
     printf( "RngDiscUniform\n"
             "==============\n"
-            "\t%15s / %8s / %8s / %8s / %8s\n",
+            "\t%15s / %8s / %8s / %8s / %8s\n"
             "\t%15s / %8d / %8d / %8d / %8d\n",
             "Name", "Draws", "Resets", "a", "b",
             name().c_str( ), _numDraws, numResets(), _a, _b );
@@ -232,8 +230,8 @@ void rngDiscEmpirical::reset( void )
 void rngDiscEmpirical::report( void ) const
 {
     printf( "RngDiscEmpirical\n"
-            "================\n",
-            "\t%15s / %8s / %8s / %8s / %8s\n"
+            "================\n"
+            "\t%15s / %8s / %8s / %8s\n"
             "\t%15s / %8d / %8d /",
             "Name", "Draws", "Resets", "P",
             name().c_str( ), _numDraws, numResets() );
@@ -271,7 +269,7 @@ void rngExp::reset( void )
 void rngExp::report( void ) const
 {
     printf( "rngExp\n"
-            "======\n",
+            "======\n"
             "\t%15s / %8s / %8s / %8s\n"
             "\t%15s / %8d / %8d / %8.2f\n",
             "Name", "Draws", "Resets", "Mean",
@@ -306,7 +304,7 @@ void rngWeib::reset( void )
 
 void rngWeib::report( void ) const
 {
-    printf( "rngWeib\n",
+    printf( "rngWeib\n"
             "=======\n"
             "\t%15s / %8s / %8s / %8s / %8s\n"
             "\t%15s / %8d / %8d / %8.2f / %8.2f\n",
@@ -349,7 +347,7 @@ double rngGam::value( void )
             }
         }
     } else if ( _b < 5.0 ) {
-        while( 1 ) {        
+        while( 1 ) {
             double U_1 = U1.value( );
             double U_2 = U2.value( );
             double V_1 = -log( U_1 );
@@ -541,7 +539,7 @@ void rngNormal::report( void ) const
     printf( "rngNormal\n"
             "=========\n"
             "\t%15s / %8s / %8s / %8s / %8s\n"
-            "\t%15s / %8d / %8d / %8.2f / 8.2f\n",
+            "\t%15s / %8d / %8d / %8.2f / %8.2f\n",
             "Name", "Draws", "Resets", "Mu", "SigmaSQ",
             name().c_str( ), _numDraws, numResets(), _mu, _sigmasq );
 }
@@ -583,7 +581,7 @@ void rngLTNormal::report( void ) const
     printf( "rngLTNormal\n"
             "=========\n"
             "\t%15s / %8s / %8s / %8s / %8s / %8s\n"
-            "\t%15s / %8d / %8d / %8.2f / 8.2f / %8.2f\n",
+            "\t%15s / %8d / %8d / %8.2f / %8.2f / %8.2f\n",
             "Name", "Draws", "Resets", "Mu", "SigmaSQ", "LTrunc",
             name().c_str( ), _numDraws, numResets(), _mu, _sigmasq, _l );
 }
@@ -625,7 +623,7 @@ void rngRTNormal::report( void ) const
     printf( "rngRTNormal\n"
             "=========\n"
             "\t%15s / %8s / %8s / %8s / %8s / %8s\n"
-            "\t%15s / %8d / %8d / %8.2f / 8.2f / %8.2f\n",
+            "\t%15s / %8d / %8d / %8.2f / %8.2f / %8.2f\n",
             "Name", "Draws", "Resets", "Mu", "SigmaSQ", "RTrunc",
             name().c_str( ), _numDraws, numResets(), _mu, _sigmasq, _r );
 }
@@ -667,8 +665,7 @@ void rngLRTNormal::report( void ) const
     printf( "rngRTNormal\n"
             "=========\n"
             "\t%15s / %8s / %8s / %8s / %8s / %8s / %8s\n"
-            "\t%15s / %8d / %8d / %8.2f / 8.2f / %8.2f / %8.2f\n",
+            "\t%15s / %8d / %8d / %8.2f / %8.2f / %8.2f / %8.2f\n",
             "Name", "Draws", "Resets", "Mu", "SigmaSQ", "LTrunc", "RTrunc",
             name().c_str( ), _numDraws, numResets(), _mu, _sigmasq, _l, _r );
 }
-

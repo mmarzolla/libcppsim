@@ -1,12 +1,10 @@
 /****************************************************************************
  *
- * trremoval.hh
- *
- * Transient Removal classes
+ * trremoval.hh -- Transient Removal classes
  *
  * This file is part of libcppsim
  *
- * Copyright (C) 2003, 2004 Moreno Marzolla
+ * Copyright (C) 2003, 2004, 2024 Moreno Marzolla
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +21,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  ****************************************************************************/
-#ifndef TRREMOVAL_HH
-#define TRREMOVAL_HH
+#ifndef CPPSIM_TRREMOVAL_HH
+#define CPPSIM_TRREMOVAL_HH
 
 #include <vector>
 #include <cassert>
@@ -38,28 +36,28 @@ class trremoval_const : public trremoval {
 public:
     trremoval_const( const string& name, const size_t l=0 ) :
         trremoval( name ),
-        _l( l ) 
-    { 
+        _l( l )
+    {
 
     };
-    virtual ~trremoval_const( ) 
-    { 
+    virtual ~trremoval_const( )
+    {
 
     };
     // Modifiers
-    void update( double v ) 
+    void update( double v )
     {
         _numUpdates++;
         if ( numUpdates() > _l )
             _ob.push_back( v );
     };
-    void reset( void ) 
+    void reset( void )
     {
         _numUpdates = 0;
         _numResets++;
         _ob.clear();
     };
-    const vector<double>& value( void ) throw( runtime_error )
+    const vector<double>& value( void )
     {
         return _ob;
     }
@@ -77,29 +75,29 @@ class trremoval_frac : public trremoval {
 public:
     trremoval_frac( const string& name, float f ) :
         trremoval( name ),
-        _f( f ) 
-    { 
+        _f( f )
+    {
         assert( f > 0.0 );
         assert( f < 1.0 );
     };
-    virtual ~trremoval_frac( ) 
-    { 
+    virtual ~trremoval_frac( )
+    {
 
     };
     // Modifiers
-    void update( double v ) 
+    void update( double v )
     {
         _numUpdates++;
         _ob.push_back( v );
     };
-    void reset( void ) 
+    void reset( void )
     {
         _numUpdates = 0;
         _numResets++;
         _ob.clear();
         _result.clear();
     };
-    const vector<double>& value( void ) throw( runtime_error )
+    const vector<double>& value( void )
     {
         t_assert( _ob.size() > 1, runtime_error( "Need at least one observation" ) );
         _result = vector<double>( _ob.begin()+(unsigned int)(_ob.size()*_f), _ob.end() );
@@ -108,7 +106,7 @@ public:
     // Accessors
     void report( void ) const
     {
-        // Nothing 
+        // Nothing
     }
 protected:
     float _f;                   // Fraction of the observation list to remove
