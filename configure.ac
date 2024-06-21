@@ -1,11 +1,12 @@
 dnl -*-m4-*-
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(README)
+AC_INIT(README.md, [0.2.5])
+AC_CONFIG_SRCDIR([src/cppsim.hh])
 
 configure_options="$@"
 echo "libcppsim configure options: $configure_options"
 
-AM_INIT_AUTOMAKE(libcppsim,[0.2.5])
+AM_INIT_AUTOMAKE([foreign])
 AM_CONFIG_HEADER(config.h)
 
 dnl

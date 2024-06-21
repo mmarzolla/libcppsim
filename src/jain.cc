@@ -4,12 +4,12 @@
  *
  * This file is part of libcppsim
  *
- * Copyright (C) 2003 Moreno Marzolla
+ * Copyright (C) 2003, 2024 Moreno Marzolla
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,8 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  ****************************************************************************/
 
@@ -73,15 +72,15 @@ void jain::report( void ) const
     // minSize is the minimum size of all the vectors of observations
     //
     minSize = _ob[0].size( );
-    for ( j=1; j<_k; j++ ) 
+    for ( j=1; j<_k; j++ )
 	minSize = ( minSize < _ob[j].size( ) ? minSize : _ob[j].size( ) );
 
     //
     // Step 1: Xbar[j] = mean of the j-th observations
     //
     vector< double > Xbar( minSize, 0.0 );
-    for ( i=0; i<_k; i++ ) 
-        for ( j=0; j<minSize; j++ ) 
+    for ( i=0; i<_k; i++ )
+        for ( j=0; j<minSize; j++ )
             Xbar[j] += _ob[i][j] / (double)_k;
 
     //
@@ -96,7 +95,7 @@ void jain::report( void ) const
     //
     vector<double> Xbarbar_l( minSize, 0.0 );
     for ( l=0; l<minSize-1; l++ ) {
-        for ( j=l; j<minSize; j++ ) 
+        for ( j=l; j<minSize; j++ )
             Xbarbar_l[l] += Xbar[j] / (double)(minSize-l);
     }
 
@@ -104,8 +103,8 @@ void jain::report( void ) const
     // Step 4: Plot the truncated means
     //
 
-    os << "set title 'Mean of the last n-l obsertations for " << name( ) 
-       << " with " << _k 
+    os << "set title 'Mean of the last n-l obsertations for " << name( )
+       << " with " << _k
        << " replications'" << endl
        << "set grid" << endl
        << "set xlabel 'l'" << endl
@@ -114,26 +113,26 @@ void jain::report( void ) const
        << "plot '-' using ($1):($2) title '"
        << name( ) << "' with lines" << endl;
 
-    for ( j=0; j<minSize; j++ ) 
+    for ( j=0; j<minSize; j++ )
 	os << j << " " << Xbarbar_l[j] << endl;
     os << "e" << endl << flush;
 
-    os << "pause -1 'Press any key'" << endl;    
+    os << "pause -1 'Press any key'" << endl;
 
     //
     // Step 5: Plot the truncated means
     //
-    os << "set title 'Relative change for " << name( ) 
-       << " with " << _k 
+    os << "set title 'Relative change for " << name( )
+       << " with " << _k
        << " replications'" << endl
        << "set grid" << endl
        << "set xlabel 'l'" << endl
        << "set ylabel '(Xbarbar_l - Xbarbar)/Xbarbar'" << endl
        << endl
        << "plot '-' using ($1):($2) title '"
-       << name( ) << "' with lines" << endl;    
+       << name( ) << "' with lines" << endl;
 
-    for ( j=0; j<minSize; j++ ) 
+    for ( j=0; j<minSize; j++ )
 	os << j << " " << (Xbarbar_l[j]-Xbarbar)/Xbarbar << endl;
     os << "e" << endl << flush;
 
