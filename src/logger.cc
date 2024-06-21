@@ -40,7 +40,7 @@ logger::logger( ) :
 
 logger* logger::instance( const string& name )
 {
-    if ( 0 == _instances[ name ] ) 
+    if ( 0 == _instances[ name ] )
         _instances[ name ] = new logger( );
     return _instances[ name ];
 }
@@ -61,7 +61,7 @@ void logger::message( int l, const char* fmt, ... )
         vsnprintf( msgBuf, sizeof( msgBuf ), fmt, ap );
         *_os << msgBuf;
     }
-    va_end( ap );    
+    va_end( ap );
 }
 
 void logger::vmessage( int l, const char* fmt, va_list ap )

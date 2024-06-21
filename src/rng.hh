@@ -1,10 +1,8 @@
 /*****************************************************************************
  *
- * rng.hh
+ * rng.hh -- Random Number Generators classes
  *
- * Random Number Generators classes. 
- *
- * Copyright (C) 2002, 2003 Moreno Marzolla
+ * Copyright (C) 2002, 2003, 2024 Moreno Marzolla
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +20,8 @@
  *
  *****************************************************************************/
 
-#ifndef RNG_HH
-#define RNG_HH
+#ifndef CPPSIM_RNG_HH
+#define CPPSIM_RNG_HH
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -44,13 +42,13 @@ public:
 protected:
     rng( const string& name ) :
         var_impl        ( name ),
-        _numDraws       ( 0 ) 
-    { }; 
+        _numDraws       ( 0 )
+    { };
 
     unsigned int _numDraws;
 private:
     void update( double v ) // This method is disabled for rngs
-    { 
+    {
         cerr << "FATAL: rng::update( ) called for " << var<double,T>::name() << endl;
         abort( );
     };
@@ -114,7 +112,7 @@ protected:
 };
 
 //////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Weibull districution
 //
 // Density Function: f(x) = ba^(-b )x^(b-1)exp( -(x/a)^b ) if x > 0
@@ -144,16 +142,16 @@ class rngConst : public rng<double> {
 public:
     typedef rng<double> rng_impl;
 
-    rngConst( const string& name, double mean ) : 
-	rng_impl( name ), 
-        _mean( mean ) 
+    rngConst( const string& name, double mean ) :
+	rng_impl( name ),
+        _mean( mean )
     { };
     virtual ~rngConst( ) { };
-    double value( void ) { 
-        _numDraws++; 
-        return _mean; 
+    double value( void ) {
+        _numDraws++;
+        return _mean;
     };
-    void reset( void ) { 
+    void reset( void ) {
         _numUpdates = 0;
         _numResets++;
     };
