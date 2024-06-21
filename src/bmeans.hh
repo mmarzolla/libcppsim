@@ -1,10 +1,8 @@
 /*****************************************************************************
  *
- * bmeans.hh
+ * bmeans.hh -- Transient removal using batch means
  *
- * Batch Means Method.
- *
- * Copyright (C) 2002, 2003 Moreno Marzolla
+ * Copyright (C) 2002, 2003, 2024 Moreno Marzolla
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +20,8 @@
  *
  *****************************************************************************/
 
-#ifndef _CPPSIM_BMEANS_HH
-#define _CPPSIM_BMEANS_HH
+#ifndef CPPSIM_BMEANS_HH
+#define CPPSIM_BMEANS_HH
 
 #include <vector>
 #include <string>
@@ -34,20 +32,20 @@
 
 class bmeans : public statistic {
 public:
-    bmeans( const string& name, 
+    bmeans( const string& name,
 	    double confp,       // The probability for the confidence interval
 	    unsigned int bsize, // Batch Size
             trremoval* t = 0 );
     virtual ~bmeans( );
     void update( double v );    // Insert the new value into the list
-    void reset( void );       
-    void report( void ) const throw( runtime_error );
-    confInt value( void ) throw( runtime_error );
+    void reset( void );
+    void report( void ) const;
+    confInt value( void );
 
 protected:
-    
-    confInt precompute( int bsize, double p, 
-			double& variance, double& voc ) const throw( runtime_error );
+
+    confInt precompute( int bsize, double p,
+			double& variance, double& voc ) const;
 
     unsigned int  _bsize;       // Batch size
     trremoval* _t;

@@ -1,12 +1,10 @@
 /*****************************************************************************
  *
- * bmeans.cc
- *
- * Batch Means Method
+ * bmeans.cc -- Transient removal using batch means
  *
  * This file is part of libcppsim
  *
- * Copyright (C) 2002, 2003 Moreno Marzolla
+ * Copyright (C) 2002, 2003, 2024 Moreno Marzolla
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,8 +33,8 @@
 bmeans::bmeans( const string& name, double confl, unsigned int bsize, trremoval* t ) :
     statistic   ( name, confl ),
     _bsize      ( bsize ),
-    _t          ( t ? 
-                  t : 
+    _t          ( t ?
+                  t :
                   new trremoval_const( "bmeans(" + name + ")::_t", 0 ) )
 {
     assert( _bsize > 0 );
@@ -64,12 +62,12 @@ void bmeans::reset( void )
 //
 // Computes the mean and variance of the sequence of observations, using
 // batches of size bsize. The autocovariance of the batches is also shown.
-// 
+//
 confInt bmeans::precompute( int bsize,          // Batch size, >= 1
 			    double p,           // 1-\alpha conf probability
 			    double& variance,   // variance
 			    double& cov         // covariance
-			    ) const throw ( runtime_error )
+			    ) const
 {
     vector<double> _ob( _t->value( ) );
     int i,j;
@@ -100,25 +98,25 @@ confInt bmeans::precompute( int bsize,          // Batch size, >= 1
     return confInt( mean-width, mean+width, p );
 }
 
-void bmeans::report( void ) const throw( runtime_error )
+void bmeans::report( void ) const
 {
     unsigned int bsize; // Batch size
     vector<double> _ob = _t->value( );
     cout << "Batch means for: " << name() << endl;
     printf( "%4s / %6s / %10s / %10s / %10s / %23s\n",
             "b", "N", "mean", "variance", "autocov", "conf. interval" );
-           
+
     for ( bsize = 16; bsize < _ob.size( ) / 30; bsize = bsize << 1 ) {
 
         double variance, cov;
         confInt c = precompute( bsize, confl(), variance, cov );
 
         printf( "%4d / %6d / %10.4f / %10.4f / %10.4f / %10.4f - %10.4f\n",
-                bsize, _ob.size(), c.val( ), variance, cov, c.lBound( ), c.uBound( ) );
+                bsize, (int)_ob.size(), c.val( ), variance, cov, c.lBound( ), c.uBound( ) );
     }
 }
 
-confInt bmeans::value( void ) throw( runtime_error )
+confInt bmeans::value( void )
 {
     double variance, cov;
     return precompute( _bsize, confl(), variance, cov );
