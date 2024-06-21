@@ -1,0 +1,105 @@
+This is cppsim.info, produced by makeinfo version 4.1 from cppsim.texi.
+
+   This file documents cppsim, a process-oriented simulation library
+written in C++.
+
+   Copyrignt (C) 2002-2003 Moreno Marzolla
+
+   Permission is granted to make and distribute verbatime copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies
+
+   Permission is granted to copy and distributed modified versions of
+this manual under the conditions for verbatim copying, provided that
+the entire resulting derived work is distributed under the terms of a
+permission notice identical to this one
+
+   Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions, except that this permission notice may be stated in a
+translation approved by the Free Software Foundation.
+
+
+File: cppsim.info,  Node: Top,  Next: Introduction,  Up: (dir)
+
+* Menu:
+
+* Introduction:: Introduction to Cppsim
+* Coroutines::
+* Processes::
+* Concept Index::
+
+
+File: cppsim.info,  Node: Introduction,  Next: Coroutines,  Prev: Top,  Up: Top
+
+Introduction
+************
+
+   This is the introduction
+
+
+File: cppsim.info,  Node: Coroutines,  Next: Processes,  Prev: Introduction,  Up: Top
+
+Coroutines
+**********
+
+   The `coroutine' class defines a block of code which can be suspended
+at any point and later resumed.
+
+
+class coroutine
+{
+    friend void dispatch_c( coroutine * c );
+public:
+    virtual ~coroutine ();
+    
+    // Accessors
+    inline bool terminated( void ) const;
+    
+    // Modifiers
+    void resume( void );
+    void call( void );
+    
+    static size_t cStackSize;
+protected:
+    coroutine( );
+    
+    void detach( void );
+        virtual void main( void ) = 0;	// Coroutine body
+    
+    static unsigned long _num_ctx_switch;	// Number of context switches
+private:
+    inline void swapContext( ucontext_t * old_context );
+    
+    ucontext_t  *_context;
+    bool        _cor_terminated;
+    coroutine   *_caller;
+    coroutine   *_callee;
+    static coroutine *_current_coroutine;
+};
+
+
+File: cppsim.info,  Node: Processes,  Next: Concept Index,  Prev: Coroutines,  Up: Top
+
+Processes
+*********
+
+   Introduction to Processes
+
+
+File: cppsim.info,  Node: Concept Index,  Prev: Processes,  Up: Top
+
+Concept Index
+*************
+
+* Menu:
+
+
+Tag Table:
+Node: Top877
+Node: Introduction1040
+Node: Coroutines1179
+Node: Processes2086
+Node: Concept Index2227
+
+End Tag Table

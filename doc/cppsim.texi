@@ -1,0 +1,126 @@
+\input texinfo @c -*-texinfo-*-
+
+@setfilename    cppsim.info
+@settitle       cppsim
+@setchapternewpage odd
+
+@ifinfo
+This file documents cppsim, a process-oriented simulation library
+written in C++.
+
+Copyrignt @copyright{} 2002-2003 Moreno Marzolla
+
+Permission is granted to make and distribute verbatime copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies
+
+Permission is granted to copy and distributed modified versions of
+this manual under the conditions for verbatim copying, provided that
+the entire resulting derived work is distributed under the terms of a
+permission notice identical to this one
+
+Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions, except that this permission notice may be stated in a
+translation approved by the Free Software Foundation.
+@end ifinfo
+
+@titlepage
+@sp 10
+@title CppSim
+@subtitle A Process-Oriented Simulation Library in C++
+@subtitle Version 0.1
+@subtitle @today{}
+@author Moreno Marzolla
+
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 2002-2003 Moreno Marzolla
+
+Permission is granted to make and distribute verbatime copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies
+
+Permission is granted to copy and distributed modified versions of
+this manual under the conditions for verbatim copying, provided that
+the entire resulting derived work is distributed under the terms of a
+permission notice identical to this one
+
+Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions, except that this permission notice may be stated in a
+translation approved by the Free Software Foundation.
+@end titlepage
+
+@node Top, Introduction, , (dir)
+@comment  node-name,  next,  previous,  up
+
+@menu
+* Introduction:: Introduction to Cppsim
+* Coroutines::
+* Processes::
+* Concept Index::
+@end menu
+
+@node Introduction, Coroutines, Top, Top
+@comment  node-name,  next,  previous,  up
+@chapter Introduction
+
+This is the introduction
+
+@node Coroutines, Processes, Introduction, Top
+@comment  node-name,  next,  previous,  up
+@chapter Coroutines
+
+The @code{coroutine} class defines a block of code which can be suspended
+at any point and later resumed. 
+
+@verbatim
+class coroutine
+{
+    friend void dispatch_c( coroutine * c );
+public:
+    virtual ~coroutine ();
+    
+    // Accessors
+    inline bool terminated( void ) const;
+    
+    // Modifiers
+    void resume( void );
+    void call( void );
+    
+    static size_t cStackSize;
+protected:
+    coroutine( );
+    
+    void detach( void );
+        virtual void main( void ) = 0;	// Coroutine body
+    
+    static unsigned long _num_ctx_switch;	// Number of context switches
+private:
+    inline void swapContext( ucontext_t * old_context );
+    
+    ucontext_t  *_context;
+    bool        _cor_terminated;
+    coroutine   *_caller;
+    coroutine   *_callee;
+    static coroutine *_current_coroutine;
+};
+@end verbatim
+
+
+@node Processes, Concept Index, Coroutines, Top
+@comment  node-name,  next,  previous,  up
+@chapter Processes
+
+Introduction to Processes
+
+@node Concept Index, ,Processes, Top
+@comment  node-name,  next,  previous,  up
+@unnumbered Concept Index
+
+@printindex cp
+
+@contents
+@bye
+
